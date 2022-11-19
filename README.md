@@ -20,7 +20,7 @@ In this page we will be submitting the source code, assignments and other delive
 
 
 
-<p>Team member : Arun A</p>
+<p>Team leader : Arun A</p>
 <p>Team member : Dhamodharan C</p>
 <p>Team member : Manikandan S</p>
 <p>Team member :  Thamizharasan R</p>
