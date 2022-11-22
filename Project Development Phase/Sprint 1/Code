@@ -1,0 +1,72 @@
+#include <WiFi.h>
+#include "DHT.h"
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+#define DHTPIN 15
+#define DHTTYPE DHT22
+#define LED 2
+#define BUZZER 4
+LiquidCrystal_I2C LCD = LiquidCrystal_I2C(0x27, 20, 4);
+DHT dht (DHTPIN, DHTTYPE);
+void setup()
+{
+Serial.begin(115200);
+dht.begin();
+pinMode(LED,OUTPUT);
+pinMode(BUZZER,OUTPUT);
+digitalWrite(LED,LOW);
+digitalWrite(BUZZER,LOW);
+delay(10);
+Serial.println();
+wificonnect();
+mqttconnect();
+LCD.init();
+LCD.backlight();
+LCD.setCursor(0, 0);
+LCD.print("Connecting to ");
+LCD.setCursor(0, 1);
+LCD.print("WiFi ");
+delay(1000);
+LCD.clear();
+}
+void loop()
+{
+LCD.setCursor(0,2);
+LCD.print("Smoke: ");
+LCD.setCursor(0, 0);
+LCD.print("Temp: ");
+LCD.setCursor(14, 0);
+LCD.print("C");
+LCD.setCursor(0, 1);
+LCD.print("Humid: ");
+LCD.setCursor(14, 1);
+LCD.print("%");
+h = dht.readHumidity();
+t = dht.readTemperature();
+f = random(0,1023);
+if (f>300)
+{
+Serial.print("Smoke: ");
+Serial.println("Detected");
+digitalWrite(LED,HIGH);
+digitalWrite(BUZZER,HIGH);
+LCD.setCursor(7, 2);
+LCD.print("YES");
+}
+else{
+Serial.print("Smoke: ");
+Serial.println("Not Detected");
+digitalWrite(LED,LOW);
+digitalWrite(BUZZER,LOW);
+LCD.setCursor(7, 2);
+LCD.print(" NO");
+}
+Serial.print("temp:");
+Serial.println(t);
+LCD.setCursor(7, 0);
+LCD.print(t);
+Serial.print("Humid:");
+Serial.println(h);
+LCD.setCursor(7, 1);
+LCD.print(h);
+}
